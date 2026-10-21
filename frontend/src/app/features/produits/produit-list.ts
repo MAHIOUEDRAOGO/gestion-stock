@@ -40,7 +40,8 @@ import { Produit } from '../../core/models';
             <td>{{ p.categorieNom }}</td>
             <td class="right">{{ p.prixVente | number: '1.0-2' }}</td>
             <td class="right">
-              <span class="badge" [class.ok]="!p.enAlerte" [class.ko]="p.enAlerte">{{ p.stockActuel }} {{ p.unite }}</span>
+              <span class="badge" [class.ok]="!p.enAlerte" [class.ko]="p.enAlerte">{{ p.stockActuel }}</span>
+              <span class="muted"> {{ p.unite }}</span>
             </td>
             <td>{{ p.emplacement }}</td>
             <td>
