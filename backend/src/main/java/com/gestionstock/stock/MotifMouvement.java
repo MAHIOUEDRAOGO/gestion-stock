@@ -3,6 +3,7 @@ package com.gestionstock.stock;
 /** Motif d'un mouvement : explique "comment" le produit est entré ou sorti. */
 public enum MotifMouvement {
     // Entrées
+    STOCK_INITIAL(TypeMouvement.ENTREE),
     RECEPTION_FOURNISSEUR(TypeMouvement.ENTREE),
     RETOUR_CLIENT(TypeMouvement.ENTREE),
     AJUSTEMENT_POSITIF(TypeMouvement.ENTREE),
@@ -27,8 +28,8 @@ public enum MotifMouvement {
         return type;
     }
 
-    /** Motifs réservés aux opérations automatiques (facturation), pas à la saisie manuelle. */
+    /** Motifs réservés aux opérations automatiques (création de produit, facturation), pas à la saisie manuelle. */
     public boolean isAutomatique() {
-        return this == VENTE || this == ANNULATION_VENTE;
+        return this == STOCK_INITIAL || this == VENTE || this == ANNULATION_VENTE;
     }
 }

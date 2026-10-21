@@ -1,6 +1,9 @@
 package com.gestionstock.produit;
 
+import java.math.BigDecimal;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,6 +12,8 @@ import com.gestionstock.audit.AuditService;
 import com.gestionstock.common.BusinessException;
 import com.gestionstock.common.NotFoundException;
 import com.gestionstock.produit.ProduitDtos.*;
+import com.gestionstock.stock.MotifMouvement;
+import com.gestionstock.stock.StockService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,6 +24,11 @@ public class ProduitService {
     private final ProduitRepository produitRepository;
     private final CategorieRepository categorieRepository;
     private final AuditService auditService;
+    private final StockService stockService;
+
+    /** Taux appliqué quand le formulaire ne précise pas la TVA (modifiable dans application.yml). */
+    @Value("${app.tva-par-defaut:18}")
+    private BigDecimal tvaParDefaut;
 
     @Transactional(readOnly = true)
     public List<ProduitDto> rechercher(String recherche, boolean actifsSeulement) {
@@ -37,10 +47,16 @@ public class ProduitService {
             throw new BusinessException("Le code produit " + req.code() + " existe déjà");
         }
         Produit p = new Produit();
+        p.setTauxTva(tvaParDefaut);
         appliquer(p, req);
         produitRepository.save(p);
         auditService.log("CREATION_PRODUIT", "Produit", p.getId(), p.getCode() + " - " + p.getDesignation());
-        return ProduitDto.from(p);
+        if (req.stockInitial() != null && req.stockInitial() > 0) {
+            // Le stock de départ passe lui aussi par un mouvement : il reste visible dans l'historique
+            stockService.enregistrer(p.getId(), MotifMouvement.STOCK_INITIAL, req.stockInitial(),
+                    null, "Stock à la création du produit");
+        }
+        return ProduitDto.from(p); // même instance que celle mise à jour par StockService
     }
 
     @Transactional
@@ -65,7 +81,9 @@ public class ProduitService {
         p.setUnite(req.unite());
         p.setPrixAchat(req.prixAchat());
         p.setPrixVente(req.prixVente());
-        p.setTauxTva(req.tauxTva());
+        if (req.tauxTva() != null) {
+            p.setTauxTva(req.tauxTva());
+        }
         p.setSeuilAlerte(req.seuilAlerte());
         p.setEmplacement(req.emplacement());
         p.setActif(req.actif());
