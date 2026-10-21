@@ -31,7 +31,7 @@ public final class ProduitDtos {
      * tauxTva : facultatif, le taux par défaut (app.tva-par-defaut) est appliqué s'il est absent.
      */
     public record ProduitRequest(
-            @NotBlank String code,
+            String code,
             String codeBarre,
             @NotBlank String designation,
             Long categorieId,
