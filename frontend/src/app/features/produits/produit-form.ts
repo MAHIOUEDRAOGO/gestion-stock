@@ -13,26 +13,29 @@ import { Categorie, ProduitRequest } from '../../core/models';
     <h1>{{ id() ? 'Modifier le produit' : 'Nouveau produit' }}</h1>
     <form class="card" [formGroup]="form" (ngSubmit)="enregistrer()">
       <div class="form-grid">
-        <label>Code *<input formControlName="code" /></label>
-        <label>Code-barres<input formControlName="codeBarre" /></label>
+        <!-- <label>Code *<input formControlName="code" /></label>
+        <label>Code-barres<input formControlName="codeBarre" /></label> -->
         <label>Désignation *<input formControlName="designation" /></label>
         <label>Catégorie
           <select formControlName="categorieId">
             <option [ngValue]="null">—</option>
-            <option >Ordinateur</option>
-            <option >Smartphone</option>
-            <option >Clavier</option>
             @for (c of categories(); track c.id) {
               <option [ngValue]="c.id">{{ c.nom }}</option>
             }
           </select>
         </label>
         <label>Unité *<input formControlName="unite" placeholder="pièce, kg, sac…" /></label>
+                @if (!id()) {
+          <label>Quantité en stock *
+            <input type="number" min="0" formControlName="stockInitial" />
+            <span class="hint">Nombre d'unités déjà présentes en magasin</span>
+          </label>
+        }
         <label>Prix d'achat HT *<input type="number" min="0" formControlName="prixAchat" /></label>
         <label>Prix de vente HT *<input type="number" min="0" formControlName="prixVente" /></label>
-        <label>TVA (%) *<input type="number" min="0" formControlName="tauxTva" /></label>
+       <!-- <label>TVA (%) *<input type="number" min="0" formControlName="tauxTva" /></label> -->
         <label>Seuil d'alerte *<input type="number" min="0" formControlName="seuilAlerte" /></label>
-        <label>Emplacement<input formControlName="emplacement" placeholder="Rayon A3…" /></label>
+        <!-- <label>Emplacement<input formControlName="emplacement" placeholder="Rayon A3…" /></label> -->
         <label style="flex-direction: row; align-items: center; gap: .5rem">
           <input type="checkbox" formControlName="actif" /> Produit actif (décocher pour archiver)
         </label>
@@ -57,16 +60,17 @@ export class ProduitForm implements OnInit {
   protected readonly erreur = signal('');
 
   protected readonly form = inject(FormBuilder).nonNullable.group({
-    code: ['', Validators.required],
-    codeBarre: [''],
+   // code: ['', Validators.required],
+   // codeBarre: [''],
     designation: ['', Validators.required],
     categorieId: [null as number | null],
     unite: ['pièce', Validators.required],
+    stockInitial: [0, [Validators.required, Validators.min(0)]],
     prixAchat: [0, [Validators.required, Validators.min(0)]],
     prixVente: [0, [Validators.required, Validators.min(0)]],
-    tauxTva: [18, [Validators.required, Validators.min(0)]],
+    // tauxTva: [18, [Validators.required, Validators.min(0)]],
     seuilAlerte: [0, [Validators.required, Validators.min(0)]],
-    emplacement: [''],
+   // emplacement: [''],
     actif: [true],
   });
 
@@ -74,7 +78,8 @@ export class ProduitForm implements OnInit {
     this.api.categories().subscribe((c) => this.categories.set(c));
     const id = this.id();
     if (id) {
-      this.api.obtenir(+id).subscribe((p) => this.form.patchValue({ ...p, codeBarre: p.codeBarre ?? '', emplacement: p.emplacement ?? '' }));
+      this.api.obtenir(+id).subscribe((p) => this.form.patchValue(p))
+       // this.form.patchValue({ ...p, codeBarre: p.codeBarre ?? '', emplacement: p.emplacement ?? '' }));
     }
   }
 
