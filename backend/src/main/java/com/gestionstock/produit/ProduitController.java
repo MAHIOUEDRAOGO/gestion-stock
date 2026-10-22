@@ -2,6 +2,7 @@ package com.gestionstock.produit;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,13 @@ public class ProduitController {
     @PreAuthorize("hasAnyRole('ADMIN','ACHATS')")
     public ProduitDto creer(@Valid @RequestBody ProduitRequest req) {
         return service.creer(req);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','ACHATS')")
+    @ResponseStatus(HttpStatus.NO_CONTENT) // 204 : succès, sans contenu à renvoyer
+    public void supprimer(@PathVariable Long id) {
+        service.supprimer(id);
     }
 
     @PutMapping("/{id}")

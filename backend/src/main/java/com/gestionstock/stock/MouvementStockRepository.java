@@ -26,4 +26,6 @@ public interface MouvementStockRepository extends JpaRepository<MouvementStock, 
                                     @Param("debut") LocalDateTime debut,
                                     @Param("fin") LocalDateTime fin,
                                     Pageable pageable);
+    /** Spring Data écrit la requête tout seul à partir du nom de la méthode. */
+    void deleteByProduitId(Long produitId);
 }

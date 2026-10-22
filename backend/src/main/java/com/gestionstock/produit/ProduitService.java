@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import com.gestionstock.common.BusinessException;
+import com.gestionstock.stock.MouvementStockRepository;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class ProduitService {
     private final CategorieRepository categorieRepository;
     private final AuditService auditService;
     private final StockService stockService;
+    private final MouvementStockRepository mouvementRepository;
 
     /** Taux appliqué quand le formulaire ne précise pas la TVA (modifiable dans application.yml). */
     @Value("${app.tva-par-defaut:18}")
@@ -96,6 +99,23 @@ public class ProduitService {
         p.setSeuilAlerte(req.seuilAlerte());
         p.setEmplacement(req.emplacement());
         p.setActif(req.actif());
+    }
+
+    /**
+     * Suppression définitive, seulement pour un produit jamais vendu (ex. créé par erreur).
+     * Un produit déjà vendu figure sur des factures : il faut l'archiver.
+     */
+    @Transactional
+    public void supprimer(Long id) {
+        Produit p = trouver(id);
+        if (produitRepository.aEteVendu(id)) {
+            throw new BusinessException("« " + p.getDesignation()
+                    + " » figure sur des factures : il ne peut pas être supprimé. Archivez-le plutôt.");
+        }
+        mouvementRepository.deleteByProduitId(id); // ses entrées/sorties de stock disparaissent avec lui
+        produitRepository.delete(p);
+        auditService.log("SUPPRESSION_PRODUIT", "Produit", id,
+                p.getCode() + " - " + p.getDesignation() + " (stock au moment de la suppression : " + p.getStockActuel() + ")");
     }
 
     private Produit trouver(Long id) {
