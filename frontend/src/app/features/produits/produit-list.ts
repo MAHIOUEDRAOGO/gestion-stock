@@ -7,6 +7,8 @@ import { ProduitApi } from '../../core/api';
 import { AuthService } from '../../core/auth.service';
 import { Produit } from '../../core/models';
 
+import { messageErreur } from '../../core/auth.interceptor';
+
 @Component({
   selector: 'app-produit-list',
   imports: [FormsModule, RouterLink, DecimalPipe],
@@ -25,6 +27,7 @@ import { Produit } from '../../core/models';
       }
     </div>
 
+        @if (erreur()) { <p class="error">{{ erreur() }}</p> }
     <table>
       <thead>
         <tr>
@@ -47,6 +50,7 @@ import { Produit } from '../../core/models';
             <td>
               @if (peutModifier) {
                 <a class="btn small secondary" [routerLink]="['/produits', p.id]">Modifier</a>
+                              <button class="btn small danger" (click)="supprimer(p)">Supprimer</button>
               }
             </td>
           </tr>
@@ -64,6 +68,7 @@ export class ProduitList implements OnInit {
   protected recherche = '';
   protected inclureInactifs = false;
   protected readonly produits = signal<Produit[]>([]);
+  protected readonly erreur = signal('');
 
   ngOnInit(): void {
     this.charger();
@@ -71,5 +76,14 @@ export class ProduitList implements OnInit {
 
   charger(): void {
     this.api.lister(this.recherche, !this.inclureInactifs).subscribe((p) => this.produits.set(p));
+  }
+
+    supprimer(p: Produit): void {
+    if (!confirm(`Supprimer définitivement « ${p.designation} » ?`)) return;
+    this.erreur.set('');
+    this.api.supprimer(p.id).subscribe({
+      next: () => this.charger(),
+      error: (e) => this.erreur.set(messageErreur(e)),
+    });
   }
 }
