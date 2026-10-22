@@ -44,7 +44,12 @@ export interface Produit {
   enAlerte: boolean;
 }
 
-export type ProduitRequest = Omit<Produit, 'id' | 'categorieNom' | 'stockActuel' | 'enAlerte'>;
+export type ProduitRequest = Omit<Produit, 'id' | 'categorieNom' | 'stockActuel' | 'enAlerte' | 'tauxTva' | 'code' | 'codeBarre' | 'emplacement'> & {
+  /** Facultatif : sans valeur, l'API applique le taux par défaut. */
+  tauxTva?: number;
+  /** Quantité déjà en magasin, uniquement à la création. */
+  stockInitial?: number;
+};
 
 export type TypeMouvement = 'ENTREE' | 'SORTIE';
 

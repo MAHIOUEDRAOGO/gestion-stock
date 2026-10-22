@@ -25,17 +25,22 @@ public final class ProduitDtos {
         }
     }
 
-    /** Le stock n'est pas modifiable ici : il passe obligatoirement par un mouvement de stock. */
+    /**
+     * stockInitial : quantité déjà en magasin à la création (enregistrée comme un mouvement STOCK_INITIAL).
+     * Ignoré en modification : ensuite le stock ne change QUE par des mouvements.
+     * tauxTva : facultatif, le taux par défaut (app.tva-par-defaut) est appliqué s'il est absent.
+     */
     public record ProduitRequest(
-            @NotBlank String code,
+            String code,
             String codeBarre,
             @NotBlank String designation,
             Long categorieId,
             @NotBlank String unite,
             @NotNull @DecimalMin("0") BigDecimal prixAchat,
             @NotNull @DecimalMin("0") BigDecimal prixVente,
-            @NotNull @DecimalMin("0") BigDecimal tauxTva,
+            @DecimalMin("0") BigDecimal tauxTva,
             @Min(0) int seuilAlerte,
             String emplacement,
-            boolean actif) {}
+            boolean actif,
+            @Min(0) Integer stockInitial) {}
 }

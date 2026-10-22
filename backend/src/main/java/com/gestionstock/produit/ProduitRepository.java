@@ -30,8 +30,13 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
     @Query("SELECT p FROM Produit p LEFT JOIN FETCH p.categorie WHERE p.actif = TRUE AND p.stockActuel <= p.seuilAlerte ORDER BY p.stockActuel")
     List<Produit> findEnAlerte();
 
+    /** Vrai si le produit figure sur au moins une facture. */
+    @Query("SELECT COUNT(l) > 0 FROM LigneFacture l WHERE l.produit.id = :id")
+    boolean aEteVendu(@Param("id") Long id);
+
     /** Verrouille la ligne pendant la transaction : évite que deux postes vendent le même dernier article. */
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT p FROM Produit p WHERE p.id = :id")
     Optional<Produit> findByIdPourMiseAJour(@Param("id") Long id);
 }
+

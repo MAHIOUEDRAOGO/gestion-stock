@@ -33,6 +33,11 @@ export class ProduitApi {
   modifier(id: number, p: ProduitRequest) {
     return this.http.put<Produit>(`/api/produits/${id}`, p);
   }
+
+    supprimer(id: number) {
+    return this.http.delete<void>(`/api/produits/${id}`);
+  }
+
   categories() {
     return this.http.get<Categorie[]>('/api/categories');
   }

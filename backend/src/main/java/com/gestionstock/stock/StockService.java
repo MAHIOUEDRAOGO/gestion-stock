@@ -35,7 +35,7 @@ public class StockService {
     @Transactional
     public MouvementDto enregistrerManuel(MouvementRequest req) {
         if (req.motif().isAutomatique()) {
-            throw new BusinessException("Le motif " + req.motif() + " est réservé à la facturation");
+            throw new BusinessException("Le motif " + req.motif() + " est réservé aux opérations automatiques");
         }
         return MouvementDto.from(enregistrer(req.produitId(), req.motif(), req.quantite(),
                 req.reference(), req.commentaire()));
