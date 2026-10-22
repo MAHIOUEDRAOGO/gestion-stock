@@ -30,7 +30,7 @@ app:
     password: ${ADMIN_PASSWORD:admin123}
   cors:
     allowed-origins: ${CORS_ORIGINS:http://localhost:4200}
-
+  tva-par-defaut: 0
 logging:
   file:
     name: logs/gestion-stock.log
