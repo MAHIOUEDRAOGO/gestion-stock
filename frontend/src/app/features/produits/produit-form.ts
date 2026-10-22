@@ -32,7 +32,7 @@ import { Categorie, ProduitRequest } from '../../core/models';
           </label>
         }
         <label>Prix d'achat HT *<input type="number" min="0" formControlName="prixAchat" /></label>
-        <label>Prix de vente HT *<input type="number" min="0" formControlName="prixVente" /></label>
+        <label>Prix de vente  *<input type="number" min="0" formControlName="prixVente" /></label>
        <!-- <label>TVA (%) *<input type="number" min="0" formControlName="tauxTva" /></label> -->
         <label>Seuil d'alerte *<input type="number" min="0" formControlName="seuilAlerte" /></label>
         <!-- <label>Emplacement<input formControlName="emplacement" placeholder="Rayon A3…" /></label> -->

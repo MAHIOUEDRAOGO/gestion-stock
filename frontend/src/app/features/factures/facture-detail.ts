@@ -25,7 +25,7 @@ import { Facture } from '../../core/models';
       </div>
       <table style="margin-top: 1rem">
         <thead>
-          <tr><th>Désignation</th><th class="right">Qté</th><th class="right">P.U. HT</th><th class="right">Remise</th><th class="right">TVA</th><th class="right">Total HT</th></tr>
+                    <tr><th>Désignation</th><th class="right">Qté</th><th class="right">Prix unitaire</th><th class="right">Remise</th><th class="right">Total</th></tr>
         </thead>
         <tbody>
           @for (l of f.lignes; track $index) {
@@ -34,15 +34,21 @@ import { Facture } from '../../core/models';
               <td class="right">{{ l.quantite }}</td>
               <td class="right">{{ l.prixUnitaire | number: '1.0-2' }}</td>
               <td class="right">{{ l.remise | number: '1.0-2' }}</td>
-              <td class="right">{{ l.tauxTva }} %</td>
+              <!-- <td class="right">{{ l.tauxTva }} %</td> -->
               <td class="right">{{ l.totalLigne | number: '1.0-2' }}</td>
             </tr>
           }
         </tbody>
         <tfoot>
-          <tr><td colspan="5" class="right">Total HT</td><td class="right">{{ f.totalHt | number: '1.0-2' }}</td></tr>
+                    @if (f.totalTva > 0) {
+            <!-- Seulement pour les anciennes factures émises avec TVA -->
+            <tr><td colspan="4" class="right">Total HT</td><td class="right">{{ f.totalHt | number: '1.0-2' }}</td></tr>
+            <tr><td colspan="4" class="right">TVA</td><td class="right">{{ f.totalTva | number: '1.0-2' }}</td></tr>
+          }
+          <tr><td colspan="4" class="right"><strong>Total</strong></td><td class="right"><strong>{{ f.totalTtc | number: '1.0-2' }} FCFA</strong></td></tr>
+          <!-- <tr><td colspan="5" class="right">Total HT</td><td class="right">{{ f.totalHt | number: '1.0-2' }}</td></tr>
           <tr><td colspan="5" class="right">TVA</td><td class="right">{{ f.totalTva | number: '1.0-2' }}</td></tr>
-          <tr><td colspan="5" class="right"><strong>Total TTC</strong></td><td class="right"><strong>{{ f.totalTtc | number: '1.0-2' }} FCFA</strong></td></tr>
+          <tr><td colspan="5" class="right"><strong>Total TTC</strong></td><td class="right"><strong>{{ f.totalTtc | number: '1.0-2' }} FCFA</strong></td></tr> -->
         </tfoot>
       </table>
     </div>
