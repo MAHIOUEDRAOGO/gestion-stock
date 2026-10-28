@@ -34,7 +34,7 @@ export interface Produit {
   categorieId: number | null;
   categorieNom: string | null;
   unite: string;
-  prixAchat: number;
+  prixAchat: number | null;
   prixVente: number;
   tauxTva: number;
   seuilAlerte: number;
