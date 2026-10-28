@@ -31,7 +31,7 @@ import { Categorie, ProduitRequest } from '../../core/models';
             <span class="hint">Nombre d'unités déjà présentes en magasin</span>
           </label>
         }
-        <label>Prix d'achat HT *<input type="number" min="0" formControlName="prixAchat" /></label>
+        <label>Prix d'achat HT *<input type="number" min="0" formControlName="prixAchat" placeholder="Facultatif"/></label>
         <label>Prix de vente  *<input type="number" min="0" formControlName="prixVente" /></label>
        <!-- <label>TVA (%) *<input type="number" min="0" formControlName="tauxTva" /></label> -->
         <label>Seuil d'alerte *<input type="number" min="0" formControlName="seuilAlerte" /></label>
@@ -66,7 +66,8 @@ export class ProduitForm implements OnInit {
     categorieId: [null as number | null],
     unite: ['pièce', Validators.required],
     stockInitial: [0, [Validators.required, Validators.min(0)]],
-    prixAchat: [0, [Validators.required, Validators.min(0)]],
+   // prixAchat: [0, [Validators.required, Validators.min(0)]],
+    prixAchat: [null as number | null, Validators.min(0)],
     prixVente: [0, [Validators.required, Validators.min(0)]],
     // tauxTva: [18, [Validators.required, Validators.min(0)]],
     seuilAlerte: [0, [Validators.required, Validators.min(0)]],
