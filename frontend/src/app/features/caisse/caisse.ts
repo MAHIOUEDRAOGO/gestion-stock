@@ -44,7 +44,7 @@ interface LignePanier {
 
       <table>
         <thead>
-          <tr><th>Produit</th><th class="right">P.U. HT</th><th>Quantité</th><th>Remise</th><th class="right">Total HT</th><th></th></tr>
+          <tr><th>Produit</th><th class="right">Prix unitaire</th><th>Quantité</th><th>Remise</th><th class="right">Total</th><th></th></tr>
         </thead>
         <tbody>
           @for (l of panier(); track l.produit.id) {
@@ -80,7 +80,7 @@ interface LignePanier {
             </select>
           </label>
           <div class="right">
-            <div class="muted">Total HT : {{ totaux().ht | number: '1.0-2' }} · TVA : {{ totaux().tva | number: '1.0-2' }}</div>
+            
             <div class="stat">{{ totaux().ttc | number: '1.0-2' }} FCFA</div>
           </div>
         </div>

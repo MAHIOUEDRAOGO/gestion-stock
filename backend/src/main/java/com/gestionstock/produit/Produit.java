@@ -33,7 +33,7 @@ public class Produit {
     @Column(nullable = false)
     private String unite = "pièce";
 
-    @Column(name = "prix_achat", nullable = false)
+    @Column(name = "prix_achat")
     private BigDecimal prixAchat = BigDecimal.ZERO;
 
     @Column(name = "prix_vente", nullable = false)

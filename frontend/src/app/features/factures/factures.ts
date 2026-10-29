@@ -31,7 +31,7 @@ import { FactureDetail } from './facture-detail';
       </div>
       <table>
         <thead>
-          <tr><th>Numéro</th><th>Date</th><th>Client</th><th>Paiement</th><th class="right">Total TTC</th><th>Statut</th><th>Caissier</th><th></th></tr>
+          <tr><th>Numéro</th><th>Date</th><th>Client</th><th>Paiement</th><th class="right">Total</th><th>Statut</th><th>Caissier</th><th></th></tr>
         </thead>
         <tbody>
           @for (f of factures(); track f.id) {

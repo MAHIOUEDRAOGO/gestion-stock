@@ -36,7 +36,7 @@ public final class ProduitDtos {
             @NotBlank String designation,
             Long categorieId,
             @NotBlank String unite,
-            @NotNull @DecimalMin("0") BigDecimal prixAchat,
+            @DecimalMin("0") BigDecimal prixAchat,
             @NotNull @DecimalMin("0") BigDecimal prixVente,
             @DecimalMin("0") BigDecimal tauxTva,
             @Min(0) int seuilAlerte,
