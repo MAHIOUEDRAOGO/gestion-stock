@@ -32,7 +32,7 @@ import { messageErreur } from '../../core/auth.interceptor';
       <thead>
         <tr>
           <th>Code</th><th>Désignation</th><th>Catégorie</th>
-          <th class="right">Prix vente</th><th class="right">Stock</th><th>Emplacement</th><th></th>
+          <th class="right">Prix vente</th><th class="right">Stock</th><th></th>
         </tr>
       </thead>
       <tbody>
@@ -46,7 +46,7 @@ import { messageErreur } from '../../core/auth.interceptor';
               <span class="badge" [class.ok]="!p.enAlerte" [class.ko]="p.enAlerte">{{ p.stockActuel }}</span>
               <span class="muted"> {{ p.unite }}</span>
             </td>
-            <td>{{ p.emplacement }}</td>
+            
             <td>
               @if (peutModifier) {
                 <a class="btn small secondary" [routerLink]="['/produits', p.id]">Modifier</a>
@@ -55,7 +55,7 @@ import { messageErreur } from '../../core/auth.interceptor';
             </td>
           </tr>
         } @empty {
-          <tr><td colspan="7" class="muted">Aucun produit</td></tr>
+          <tr><td colspan="6" class="muted">Aucun produit</td></tr>
         }
       </tbody>
     </table>
